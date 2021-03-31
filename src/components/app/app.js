@@ -8,15 +8,6 @@ import TodoList from '../todo-list/todo-list';
 export default class App extends Component {
   maxId = 100;
 
-  createTodoItem(label) {
-    return {
-      id: this.maxId++,
-      label,
-      important: false,
-      done: false,
-    };
-  }
-
   search = (items, term) => {
     return items.filter((item) => item.label.toLowerCase().indexOf(term) > -1);
   };
@@ -32,33 +23,48 @@ export default class App extends Component {
     }
   };
 
+  saveToLocalStorage = (data) => {
+    localStorage.setItem('todoData', JSON.stringify(data));
+  };
+
   state = {
-    todoData: [
-      this.createTodoItem('Drink coffee'),
-      this.createTodoItem('Learn React'),
-      this.createTodoItem('Have a lunch'),
-    ],
+    todoData: [],
     term: '',
     filterType: 'all',
   };
 
+  componentDidMount() {
+    this.setState({
+      todoData: JSON.parse(localStorage.getItem('todoData') || '[]'),
+    });
+  }
+
   deleteItem = (id) => {
-    this.setState(({ todoData }) => ({ todoData: todoData.filter((item) => item.id !== id) }));
+    const newData = this.state.todoData.filter((item) => item.id !== id);
+    this.setState(() => ({ todoData: newData }));
+    this.saveToLocalStorage(newData);
   };
 
   addItem = (label) => {
-    const newItem = this.createTodoItem(label);
-    this.setState(({ todoData }) => ({
-      todoData: [...todoData, newItem],
-    }));
+    const newData = [
+      ...this.state.todoData,
+      {
+        id: this.maxId++,
+        label,
+        important: false,
+        done: false,
+      },
+    ];
+    this.setState(() => ({ todoData: newData }));
+    this.saveToLocalStorage(newData);
   };
 
   toggleProperty = (id, property) => {
-    this.setState(({ todoData }) => ({
-      todoData: todoData.map((item) =>
-        item.id === id ? { ...item, [property]: !item[property] } : item
-      ),
-    }));
+    const newData = this.state.todoData.map((item) =>
+      item.id === id ? { ...item, [property]: !item[property] } : item
+    );
+    this.setState(() => ({ todoData: newData }));
+    this.saveToLocalStorage(newData);
   };
 
   toggleImportant = (id) => {
