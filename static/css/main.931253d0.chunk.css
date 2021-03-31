@@ -1,0 +1,2 @@
+.todo-list-item{display:-webkit-flex;display:flex;-webkit-justify-content:space-between;justify-content:space-between;-webkit-align-items:center;align-items:center}.todo-list-item-label{cursor:pointer}.todo-list-item-label.done{text-decoration:line-through}.todo-list-item-label.important{color:#4682b4;font-weight:600}.item-control{min-width:90px;display:-webkit-flex;display:flex;-webkit-justify-content:space-between;justify-content:space-between}.item-control .btn-control{min-width:40px}
+/*# sourceMappingURL=main.931253d0.chunk.css.map */
